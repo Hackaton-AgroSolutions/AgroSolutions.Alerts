@@ -1,6 +1,12 @@
 <Solution>
+  <Folder Name="/k8s/">
+    <File Path="k8s/agrosolutions-azurefunction-az.yaml" />
+    <File Path="k8s/agrosolutions-azurefunction-configmap.yaml" />
+    <File Path="k8s/agrosolutions-azurefunction-hpa.yaml" />
+    <File Path="k8s/agrosolutions-azurefunction-secret.yaml" />
+    <File Path="k8s/agrosolutions-azurefunction-service.yaml" />
+  </Folder>
   <Project Path="AgroSolutions.AzureFunction.Domain/AgroSolutions.AzureFunction.Domain.csproj" />
   <Project Path="AgroSolutions.AzureFunction.Functions/AgroSolutions.AzureFunction.Functions.csproj" />
   <Project Path="AgroSolutions.AzureFunction.Infrastructure/AgroSolutions.AzureFunction.Infrastructure.csproj" />
-
 </Solution>

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agrosolutions-azurefunction-functions
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agrosolutions-azurefunction-functions
+  template:
+    metadata:
+      labels:
+        app: agrosolutions-azurefunction-functions
+    spec:
+      containers:
+        - name: agrosolutions-azurefunction-functions
+          image: marioguilhermedev/agrosolutions-azurefunction:latest
+          ports:
+            - containerPort: 80

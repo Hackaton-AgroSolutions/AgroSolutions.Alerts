@@ -5,7 +5,7 @@ on:
     branches: [ "master" ]
 
 env:
-  IMAGE_NAME: agrosolutions-azurefunctions
+  IMAGE_NAME: agrosolutions-azurefunction
   IMAGE_TAG: latest
   DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

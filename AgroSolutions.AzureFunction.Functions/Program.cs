@@ -10,11 +10,18 @@ using Prometheus;
 using Serilog;
 using Serilog.Sinks.Grafana.Loki;
 
+const string APP_NAME = "agro-solution-azurefunction-functions";
+
 Log.Logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
-    .Enrich.WithProperty("service_name", "agro-solution-azurefunction-function")
     .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] (CorrelationId={CorrelationId}) {Message:lj} {NewLine}{Exception}")
-    .WriteTo.GrafanaLoki("http://loki:3100")
+    .WriteTo.GrafanaLoki("http://loki:3100", [
+        new()
+        {
+            Key = "app",
+            Value = APP_NAME
+        }
+    ])
     .CreateLogger();
 
 FunctionsApplicationBuilder builder = FunctionsApplication.CreateBuilder(args);
@@ -29,6 +36,7 @@ builder.Services.Configure<RabbitMqOptions>(builder.Configuration.GetSection("Me
 builder.Services.AddSingleton<IInfluxDbService>(sp => new InfluxDbService(builder.Configuration));
 builder.Services.AddSingleton<IRabbitConnectionProvider, RabbitConnectionProvider>();
 builder.Services.AddScoped<IMessagingConnectionFactory, RabbitChannelFactory>();
+builder.Services.AddScoped<IWeatherService, OpenMeteoWeatherService>();
 builder.Services.AddSingleton(sp => Metrics.DefaultRegistry);
 
 IHost host = builder.Build();

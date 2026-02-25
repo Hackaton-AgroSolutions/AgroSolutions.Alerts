@@ -1,8 +1,8 @@
-﻿using InfluxDB.Client;
+﻿using InfluxDB.Client.Writes;
 
 namespace AgroSolutions.AzureFunction.Functions.Interfaces;
 
 public interface IInfluxDbService
 {
-    void Write(Action<WriteApi> action);
+    Task WritePointDataAsync(PointData pointData);
 }

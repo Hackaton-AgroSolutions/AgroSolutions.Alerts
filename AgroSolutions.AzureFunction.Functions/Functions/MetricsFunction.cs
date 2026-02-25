@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Prometheus;
+using Serilog;
 
 namespace AgroSolutions.AzureFunction.Functions.Functions;
 
@@ -12,6 +13,7 @@ public static class MetricsFunction
     public static async Task Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "metrics")] HttpRequest req)
     {
+        Log.Information("Collection metrics with Prometheus.");
         RequestCounter.Inc();
         req.HttpContext.Response.ContentType = "text/plain; version=0.0.4";
         await Metrics.DefaultRegistry.CollectAndExportAsTextAsync(req.HttpContext.Response.Body);

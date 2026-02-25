@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
+using Serilog;
+using System.Text.Json;
 
 namespace AgroSolutions.AzureFunction.Infrastructure.Messaging;
 
@@ -11,6 +13,7 @@ public class RabbitConnectionProvider : IRabbitConnectionProvider
 
     public RabbitConnectionProvider(IOptions<RabbitMqOptions> options)
     {
+        Log.Information(JsonSerializer.Serialize(options.Value));
         _factory = new ConnectionFactory
         {
             HostName = options.Value.Host,

@@ -1,27 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: agrosolutions-azurefunction-functions
+  name: agrosolutions-alerts-functions
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: agrosolutions-azurefunction-functions
+      app: agrosolutions-alerts-functions
   template:
     metadata:
       labels:
-        app: agrosolutions-azurefunction-functions
+        app: agrosolutions-alerts-functions
     spec:
       containers:
-        - name: agrosolutions-azurefunction-functions
-          image: marioguilhermedev/agrosolutions-azurefunction:latest
+        - name: agrosolutions-alerts-functions
+          image: marioguilhermedev/agrosolutions-alert:latest
           ports:
             - containerPort: 80
           env:
             - name: RabbitMQConnection
               valueFrom:
                 configMapKeyRef:
-                  name: agrosolutions-azurefunction-config
+                  name: agrosolutions-alerts-config
                   key: RabbitMQConnection
 
             - name: AzureWebJobsStorage
@@ -29,6 +29,6 @@ spec:
 
           envFrom:
           - configMapRef:
-              name: agrosolutions-azurefunction-config
+              name: agrosolutions-alerts-config
           - secretRef:
-              name: agrosolutions-azurefunction-secret
+              name: agrosolutions-alerts-secret

@@ -17,9 +17,6 @@
     "Messaging:Destinations:0:Id": "RECEIVED_SENSOR_DATA",
     "Messaging:Destinations:0:Queue": "received-sensor-data-to-influxdb",
     "Messaging:Destinations:0:RoutingKey": "received.sensor.data",
-    "Messaging:Destinations:1:Id": "RECEIVED_SENSOR_DATA",
-    "Messaging:Destinations:1:Queue": "received-sensor-data-to-alerts",
-    "Messaging:Destinations:1:RoutingKey": "received.sensor.data",
     "WeatherService:Url": "https://api.open-meteo.com",
     "GrafanaLoki:Url": "http://localhost:3100",
     "RabbitMQConnection": "amqp://guest:guest@localhost:5672/"

@@ -50,13 +50,6 @@ public class ProcessSensorDataFunction(IInfluxDbService influxDb, IAlertsDomainS
                     .Field("status_id", finalStatusId)
                     .Timestamp(receivedSensorDataEvent.Timestamp, WritePrecision.Ns);
                 await _influxDb.WritePointDataAsync(pointData);
-
-                //PointData fieldStatusPointData = PointData
-                //    .Measurement("field_status")
-                //    .Tag("field_id", receivedSensorDataEvent.FieldId.ToString())
-                //    .Field("status_id", finalStatusId)
-                //    .Timestamp(receivedSensorDataEvent.Timestamp, WritePrecision.Ns);
-                //await _influxDb.WritePointDataAsync(fieldStatusPointData);
             }
         }
         catch (Exception ex)

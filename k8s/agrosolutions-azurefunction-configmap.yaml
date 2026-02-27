@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: agrosolutions-azurefunction-config
+  name: agrosolutions-alerts-config
 data:
   ASPNETCORE_URLS: http://+:8080
   AzureWebJobsStorage: "UseDevelopmentStorage=true"
@@ -12,9 +12,6 @@ data:
   Messaging__Destinations__0__Id: RECEIVED_SENSOR_DATA
   Messaging__Destinations__0__Queue: received-sensor-data-to-influxdb
   Messaging__Destinations__0__RoutingKey: received.sensor.data
-  Messaging__Destinations__1__Id: RECEIVED_SENSOR_DATA
-  Messaging__Destinations__1__Queue: received-sensor-data-to-alerts
-  Messaging__Destinations__1__RoutingKey: received.sensor.data
   WeatherService__Url: https://api.open-meteo.com
   InfluxDB__Url: http://agrosolutions-ingest-influxdb:8086
   InfluxDB__Username: agrosolutions-admin

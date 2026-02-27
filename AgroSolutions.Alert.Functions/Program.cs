@@ -1,3 +1,5 @@
+using AgroSolutions.Alert.Domain.DomainServices.Interfaces;
+using AgroSolutions.Alert.Infrastructure.DomainServices;
 using AgroSolutions.Alert.Infrastructure.Interfaces;
 using AgroSolutions.Alert.Infrastructure.Messaging;
 using AgroSolutions.Alert.Infrastructure.Services;
@@ -38,6 +40,7 @@ builder.Services.AddSingleton<IRabbitConnectionProvider, RabbitConnectionProvide
 builder.Services.AddScoped<IMessagingConnectionFactory, RabbitChannelFactory>();
 builder.Services.AddScoped<IWeatherService, OpenMeteoWeatherService>();
 builder.Services.AddSingleton(sp => Metrics.DefaultRegistry);
+builder.Services.AddScoped<IAlertsDomainService, AlertsDomainService>();
 
 IHost host = builder.Build();
 

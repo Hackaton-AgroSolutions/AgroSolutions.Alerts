@@ -13,7 +13,7 @@ public class WeatherCollectorFunction(IInfluxDbService influxDb, IWeatherService
     private readonly IWeatherService _weatherService = weatherService;
 
     [Function("WeatherCollector")]
-    public async Task Run([TimerTrigger("* */59 * * * *", RunOnStartup = true)] TimerInfo myTimer)
+    public async Task Run([TimerTrigger("* */1 * * * *", RunOnStartup = true)] TimerInfo myTimer)
     {
         Log.Information("Fetching Weather data from API.");
         (WeatherData currentWeather, IEnumerable<WeatherData> futureWeathers) = await _weatherService.GetCurrentAndFutureWeatherDataAsync();

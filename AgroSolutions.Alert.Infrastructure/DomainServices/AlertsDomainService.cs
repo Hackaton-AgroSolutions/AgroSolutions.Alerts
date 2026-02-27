@@ -101,7 +101,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
         "    |> filter(fn: (r) => r._field == \"data_quality_score\")"+
         "    |> min()");
 
-        if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "0") >= 70)
+        if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString()?.Split(".").First().Split(",").First() ?? "0") >= 70)
             return false;
 
         Log.Warning("The Sensor with Id {SensorClientId} in the Field with Id {FieldId} has low data quality.", receivedSensorDataEvent.SensorClientId, receivedSensorDataEvent.FieldId);

@@ -499,6 +499,18 @@ data:
                     "value": 203
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Fired At"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 213
+                  }
+                ]
               }
             ]
           },
@@ -585,9 +597,9 @@ data:
       },
       "timepicker": {},
       "timezone": "browser",
-      "title": "Sensors metrics",
+      "title": "Sensors Status",
       "uid": "agcdsz22",
-      "version": 9,
+      "version": 1,
       "weekStart": ""
     }
 

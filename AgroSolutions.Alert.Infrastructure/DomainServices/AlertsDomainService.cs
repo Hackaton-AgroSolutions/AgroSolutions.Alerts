@@ -115,16 +115,14 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
         return true;
     }
 
-    // Rule number 4: If the air temperature is above 35°C for 3 consecutive days and the probability of rain in the next 24 hours does not exceed 60% → "Heat wave – Potential impact on production"
+    // Rule number 4: If the air temperature is above 35°C in the last 6 hours and the probability of rain in the next 24 hours does not exceed 60% → "Heat wave – Potential impact on production"
     private async Task<bool> CheckHeatWaveAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
         IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("from(bucket: \"main-bucket\")"+
-        "    |> range(start: -3d)" +
+        "    |> range(start: -6h)" +
         "    |> filter(fn: (r) => r._measurement == \"agro_sensors\")" +
         $"    |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\")" +
-        "    |> filter(fn: (r) => r._field == \"air_temperature_c\")" +
-        "    |> aggregateWindow(every: 1d, fn: min, createEmpty: false)" +
-        "    |> filter(fn: (r) => r._value > 35)");
+        "    |> filter(fn: (r) => r._field == \"air_temperature_c\")");
         IEnumerable<FluxTable> tablesWeather = await _influxDb.QueryAsync("import \"experimental\""+
         "   from(bucket: \"main-bucket\")"+
         "       |> range(start: now(), stop: experimental.addDuration(d: 3d, to: now()))"+
@@ -132,11 +130,8 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
         "       |> filter(fn: (r) => r.city == \"sao_paulo\")"+
         "       |> filter(fn: (r) => r._field == \"rain_probability\")"+
         "       |> max()");
-        double maxRainProbability = tablesWeather
-            .SelectMany(t => t.Records.Select(r => Convert.ToDouble(r.GetValue())))
-            .FirstOrDefault();
-
-        if (!(tables.SelectMany(t => t.Records).Count() == 3 && maxRainProbability < 60))
+        if (!(decimal.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "30") >= 35
+            && double.Parse(tablesWeather.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "30") > 60))
             return false;
 
         Log.Warning("The Sensor with Id {SensorClientId} in the Field with Id {FieldId} detected an upcoming heat wave.", receivedSensorDataEvent.SensorClientId, receivedSensorDataEvent.FieldId);

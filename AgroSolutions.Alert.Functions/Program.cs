@@ -12,7 +12,7 @@ using Prometheus;
 using Serilog;
 using Serilog.Sinks.Grafana.Loki;
 
-const string APP_NAME = "agro-solution-alerts-function";
+const string APP_NAME = "agro-solution-alert-function";
 
 FunctionsApplicationBuilder builder = FunctionsApplication.CreateBuilder(args);
 

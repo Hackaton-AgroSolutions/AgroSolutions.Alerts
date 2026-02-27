@@ -47,7 +47,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
             "   |> filter(fn: (r) => r._field == \"soil_moisture_percent\")"+
             "   |> min()"
         );
-        if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "0") >= 30)
+        if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "30") >= 30)
             return false;
 
         Log.Warning("The field with ID {FieldId} and the sensor with ID {SensorClientId} are at risk of drying out.", receivedSensorDataEvent.FieldId, receivedSensorDataEvent.SensorClientId);

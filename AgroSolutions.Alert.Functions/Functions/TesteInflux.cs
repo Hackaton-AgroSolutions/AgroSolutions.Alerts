@@ -9,7 +9,7 @@ public class TesteInflux(IInfluxDbService influxDb)
 {
     private readonly IInfluxDbService _influxDb = influxDb;
 
-    [Function("ProcessSensorData")]
+    [Function("TesteInflux")]
     public async Task Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "teste")] HttpRequest req)
     {

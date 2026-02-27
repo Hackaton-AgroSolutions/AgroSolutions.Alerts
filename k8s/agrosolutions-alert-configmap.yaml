@@ -16,6 +16,6 @@ data:
   InfluxDB__Url: "http://influxdb:8086"
   InfluxDB__Username: "agrosolutions-admin"
   InfluxDB__Org: "agrosolutions-org"
-  InfluxDB__Bucket: "agrosolutions-bucket"
+  InfluxDB__Bucket: "main-bucket"
   GrafanaLoki__Url: http://loki:3100
   RabbitMQConnection: "amqp://guest:guest@rabbitmq:5672/"

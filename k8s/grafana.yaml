@@ -24,7 +24,7 @@ data:
         jsonData:
           version: Flux
           organization: agrosolutions-org
-          defaultBucket: agrosolutions-bucket
+          defaultBucket: "main-bucket"
         secureJsonData:
           token: Je2LUfYXX9o10pAcYgzsG8tWeRlR5qwKjpAqlV_sf-HyD09G2-eG90yyOXWa6tNVDtwKzq_zshT6XXd4FYBi3A==
 ---
@@ -356,7 +356,7 @@ data:
                 "type": "influxdb",
                 "uid": "P951FEA4DE68E13C5"
               },
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => r._measurement == \"alerts\")\r\n  |> filter(fn: (r) => r._field == \"message\")\r\n  |> group(columns: [])\r\n  |> keep(columns: [\"_time\", \"field_id\", \"_value\"])\r\n  |> rename(columns: {_value: \"Message\"})\r\n  |> rename(columns: {_time: \"Fired At\"})\r\n  |> rename(columns: {field_id: \"Field ID\"})\r\n",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => r._measurement == \"alerts\")\r\n  |> filter(fn: (r) => r._field == \"message\")\r\n  |> group(columns: [])\r\n  |> keep(columns: [\"_time\", \"field_id\", \"_value\"])\r\n  |> rename(columns: {_value: \"Message\"})\r\n  |> rename(columns: {_time: \"Fired At\"})\r\n  |> rename(columns: {field_id: \"Field ID\"})\r\n",
               "refId": "A"
             }
           ],
@@ -521,7 +521,7 @@ data:
                 "type": "influxdb",
                 "uid": "P951FEA4DE68E13C5"
               },
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => r._measurement == \"agro_sensors\")\r\n  |> filter(fn: (r) => r.sensor_client_id == \"${sensor_client_id}\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> keep(columns: [\r\n      \"_time\",\r\n      \"soil_moisture_percent\",\r\n      \"air_temperature_c\",\r\n      \"precipitation_mm\",\r\n      \"air_humidity_percent\",\r\n      \"soil_ph\",\r\n      \"wind_speed_kmh\",\r\n      \"data_quality_score\"\r\n  ])\r\n  |> rename(columns: {\r\n      \"soil_moisture_percent\": \"Soil Moisture (%)\",\r\n      \"air_temperature_c\": \"Air Temp (°C)\",\r\n      \"precipitation_mm\": \"Precipitation (mm)\",\r\n      \"air_humidity_percent\": \"Air Humidity (%)\",\r\n      \"soil_ph\": \"Soil pH\",\r\n      \"wind_speed_kmh\": \"Wind Speed (km/h)\",\r\n      \"data_quality_score\": \"Data Quality\"\r\n  })",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => r._measurement == \"agro_sensors\")\r\n  |> filter(fn: (r) => r.sensor_client_id == \"${sensor_client_id}\")\r\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> keep(columns: [\r\n      \"_time\",\r\n      \"soil_moisture_percent\",\r\n      \"air_temperature_c\",\r\n      \"precipitation_mm\",\r\n      \"air_humidity_percent\",\r\n      \"soil_ph\",\r\n      \"wind_speed_kmh\",\r\n      \"data_quality_score\"\r\n  ])\r\n  |> rename(columns: {\r\n      \"soil_moisture_percent\": \"Soil Moisture (%)\",\r\n      \"air_temperature_c\": \"Air Temp (°C)\",\r\n      \"precipitation_mm\": \"Precipitation (mm)\",\r\n      \"air_humidity_percent\": \"Air Humidity (%)\",\r\n      \"soil_ph\": \"Soil pH\",\r\n      \"wind_speed_kmh\": \"Wind Speed (km/h)\",\r\n      \"data_quality_score\": \"Data Quality\"\r\n  })",
               "refId": "A"
             }
           ],
@@ -625,7 +625,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => \r\n    r._measurement == \"agro_sensors\" and\r\n    r._field == \"status_id\" and\r\n    r.field_id == \"${field_id}\"\r\n  )\r\n  |> last()\r\n  |> keep(columns: [\"field_id\", \"_value\"])\r\n  |> rename(columns: {_value: \"status_id\"})",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => \r\n    r._measurement == \"agro_sensors\" and\r\n    r._field == \"status_id\" and\r\n    r.field_id == \"${field_id}\"\r\n  )\r\n  |> last()\r\n  |> keep(columns: [\"field_id\", \"_value\"])\r\n  |> rename(columns: {_value: \"status_id\"})",
               "refId": "A"
             }
           ],
@@ -704,7 +704,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => r._measurement == \"alerts\")\r\n  |> filter(fn: (r) => r.field_id == \"${field_id}\")\r\n  |> filter(fn: (r) => r._field == \"message\")\r\n  |> group(columns: [])\r\n  |> keep(columns: [\"_time\", \"_value\"])\r\n  |> rename(columns: {_time: \"Fired At\"})\r\n  |> rename(columns: {_value: \"Message\"})",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -30d)\r\n  |> filter(fn: (r) => r._measurement == \"alerts\")\r\n  |> filter(fn: (r) => r.field_id == \"${field_id}\")\r\n  |> filter(fn: (r) => r._field == \"message\")\r\n  |> group(columns: [])\r\n  |> keep(columns: [\"_time\", \"_value\"])\r\n  |> rename(columns: {_time: \"Fired At\"})\r\n  |> rename(columns: {_value: \"Message\"})",
               "refId": "A"
             }
           ],
@@ -726,12 +726,12 @@ data:
               "type": "influxdb",
               "uid": "P951FEA4DE68E13C5"
             },
-            "definition": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"agrosolutions-bucket\",\r\n  tag: \"sensor_client_id\"\r\n)",
+            "definition": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"main-bucket\",\r\n  tag: \"sensor_client_id\"\r\n)",
             "label": "Sensor Identifier",
             "name": "sensor_client_id",
             "options": [],
             "query": {
-              "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"agrosolutions-bucket\",\r\n  tag: \"sensor_client_id\"\r\n)"
+              "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"main-bucket\",\r\n  tag: \"sensor_client_id\"\r\n)"
             },
             "refresh": 1,
             "regex": "",
@@ -747,12 +747,12 @@ data:
               "type": "influxdb",
               "uid": "P951FEA4DE68E13C5"
             },
-            "definition": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"agrosolutions-bucket\",\r\n  tag: \"field_id\"\r\n)",
+            "definition": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"main-bucket\",\r\n  tag: \"field_id\"\r\n)",
             "label": "Field Identifier",
             "name": "field_id",
             "options": [],
             "query": {
-              "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"agrosolutions-bucket\",\r\n  tag: \"field_id\"\r\n)"
+              "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.tagValues(\r\n  bucket: \"main-bucket\",\r\n  tag: \"field_id\"\r\n)"
             },
             "refresh": 1,
             "regex": "",
@@ -863,7 +863,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> last()",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> last()",
               "refId": "A"
             }
           ],
@@ -924,7 +924,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> last()",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> last()",
               "refId": "A"
             }
           ],
@@ -986,7 +986,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"precipitation\")\r\n  |> last()",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"precipitation\")\r\n  |> last()",
               "refId": "A"
             }
           ],
@@ -1047,7 +1047,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"rain_probability\")\r\n  |> last()",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"rain_probability\")\r\n  |> last()",
               "refId": "A"
             }
           ],
@@ -1109,7 +1109,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"wind_speed\")\r\n  |> last()",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r.city == \"sao_paulo\")\r\n  |> filter(fn: (r) => r._field == \"wind_speed\")\r\n  |> last()",
               "refId": "A"
             }
           ],
@@ -1171,7 +1171,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "from(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r._field == \"weather_desc\")\r\n  |> last()",
+              "query": "from(bucket: \"main-bucket\")\r\n  |> range(start: -24h)\r\n  |> filter(fn: (r) => r._measurement == \"weather_current\")\r\n  |> filter(fn: (r) => r._field == \"weather_desc\")\r\n  |> last()",
               "refId": "A"
             }
           ],
@@ -1275,7 +1275,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> sort(columns: [\"_time\"])",
+              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"main-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"temperature\")\r\n  |> sort(columns: [\"_time\"])",
               "refId": "A"
             }
           ],
@@ -1366,7 +1366,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> sort(columns: [\"_time\"])",
+              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"main-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"humidity\")\r\n  |> sort(columns: [\"_time\"])",
               "refId": "A"
             }
           ],
@@ -1457,7 +1457,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"precipitation\")\r\n  |> sort(columns: [\"_time\"])",
+              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"main-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"precipitation\")\r\n  |> sort(columns: [\"_time\"])",
               "refId": "A"
             }
           ],
@@ -1548,7 +1548,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"rain_probability\")\r\n  |> sort(columns: [\"_time\"])",
+              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"main-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"rain_probability\")\r\n  |> sort(columns: [\"_time\"])",
               "refId": "A"
             }
           ],
@@ -1639,7 +1639,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"wind_speed\")\r\n  |> sort(columns: [\"_time\"])",
+              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"main-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"wind_speed\")\r\n  |> sort(columns: [\"_time\"])",
               "refId": "A"
             }
           ],
@@ -1719,7 +1719,7 @@ data:
           "pluginVersion": "12.4.0",
           "targets": [
             {
-              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"agrosolutions-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"weather_desc\")\r\n  |> sort(columns: [\"_time\"])",
+              "query": "import \"experimental\"\r\n\r\nfrom(bucket: \"main-bucket\")\r\n  |> range(start: now(), stop: experimental.addDuration(d: 7d, to: now()))\r\n  |> filter(fn: (r) => r._measurement == \"weather_forecast\")\r\n  |> filter(fn: (r) => r._field == \"weather_desc\")\r\n  |> sort(columns: [\"_time\"])",
               "refId": "A"
             }
           ],

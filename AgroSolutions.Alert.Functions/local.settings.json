@@ -7,7 +7,7 @@
     "InfluxDB:Username": "agrosolutions-admin",
     "InfluxDB:Password": "agrosolutionsAdmin123$",
     "InfluxDB:Org": "agrosolutions-org",
-    "InfluxDB:Bucket": "agrosolutions-bucket",
+    "InfluxDB:Bucket": "main-bucket",
     "InfluxDB:Token": "Je2LUfYXX9o10pAcYgzsG8tWeRlR5qwKjpAqlV_sf-HyD09G2-eG90yyOXWa6tNVDtwKzq_zshT6XXd4FYBi3A==",
     "Messaging:Host": "localhost",
     "Messaging:Port": 5672,

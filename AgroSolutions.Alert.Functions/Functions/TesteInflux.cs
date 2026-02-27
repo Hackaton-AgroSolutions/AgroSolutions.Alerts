@@ -16,7 +16,7 @@ public class TesteInflux(IInfluxDbService influxDb)
         Log.Information("Testing query.");
         try
         {
-            var res = await _influxDb.QueryAsync($@"from(bucket: ""agrosolutions-bucket"")
+            var res = await _influxDb.QueryAsync($@"from(bucket: ""main-bucket"")
   |> range(start: -30d)
   |> filter(fn: (r) => r[""_field""] == ""humidity"")
   |> yield(name: ""mean"")");

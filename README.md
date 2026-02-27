@@ -1,5 +1,5 @@
 # 📦 AgroSolutions.Alert
-> As Funções do Azure, desenvolvidas no Hackathon da AgroSolutions, mantêm o contexto Serverless para o ambiente Azure..
+> As Funções do Azure, desenvolvidas no Hackathon da AgroSolutions, mantêm o contexto Serverless para o ambiente Azure com ações assíncronas.
 
 ## 🚜 Funcionalidades
   - Processar dados dos sensores;

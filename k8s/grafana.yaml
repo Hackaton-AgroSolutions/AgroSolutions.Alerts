@@ -51,192 +51,6 @@ kind: ConfigMap
 metadata:
   name: grafana-dashboards
 data:
-  alerting.json: |
-    {
-      "annotations": {
-        "list": [
-          {
-            "builtIn": 1,
-            "datasource": {
-              "type": "grafana",
-              "uid": "-- Grafana --"
-            },
-            "enable": true,
-            "hide": true,
-            "iconColor": "rgba(0, 211, 255, 1)",
-            "name": "Annotations & Alerts",
-            "type": "dashboard"
-          }
-        ]
-      },
-      "editable": true,
-      "fiscalYearStartMonth": 0,
-      "graphTooltip": 0,
-      "links": [],
-      "panels": [
-        {
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 12,
-            "x": 0,
-            "y": 0
-          },
-          "id": 3,
-          "options": {
-            "alertInstanceLabelFilter": "",
-            "alertName": "",
-            "dashboardAlerts": false,
-            "folder": {
-              "title": "alerts/",
-              "uid": "afed1kjqj95ogd"
-            },
-            "groupBy": [],
-            "groupMode": "default",
-            "maxItems": 20,
-            "showInactiveAlerts": true,
-            "sortOrder": 1,
-            "stateFilter": {
-              "error": true,
-              "firing": false,
-              "noData": true,
-              "normal": true,
-              "pending": true,
-              "recovering": true
-            },
-            "viewMode": "stat"
-          },
-          "pluginVersion": "12.4.0",
-          "title": "Total Normal Alerts",
-          "type": "alertlist"
-        },
-        {
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 12,
-            "x": 12,
-            "y": 0
-          },
-          "id": 2,
-          "options": {
-            "alertInstanceLabelFilter": "",
-            "alertName": "",
-            "dashboardAlerts": false,
-            "groupBy": [],
-            "groupMode": "default",
-            "maxItems": 20,
-            "showInactiveAlerts": false,
-            "sortOrder": 1,
-            "stateFilter": {
-              "error": false,
-              "firing": true,
-              "noData": false,
-              "normal": false,
-              "pending": false,
-              "recovering": false
-            },
-            "viewMode": "stat"
-          },
-          "pluginVersion": "12.4.0",
-          "title": "Total Firing Alerts",
-          "type": "alertlist"
-        },
-        {
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 17,
-            "w": 12,
-            "x": 0,
-            "y": 4
-          },
-          "id": 4,
-          "options": {
-            "alertInstanceLabelFilter": "",
-            "alertName": "",
-            "dashboardAlerts": false,
-            "groupBy": [],
-            "groupMode": "custom",
-            "maxItems": 20,
-            "showInactiveAlerts": false,
-            "sortOrder": 1,
-            "stateFilter": {
-              "error": true,
-              "firing": false,
-              "noData": true,
-              "normal": true,
-              "pending": true,
-              "recovering": true
-            },
-            "viewMode": "list"
-          },
-          "pluginVersion": "12.4.0",
-          "title": "Pending Alerts",
-          "type": "alertlist"
-        },
-        {
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 17,
-            "w": 12,
-            "x": 12,
-            "y": 4
-          },
-          "id": 1,
-          "options": {
-            "alertInstanceLabelFilter": "",
-            "alertName": "",
-            "dashboardAlerts": false,
-            "groupBy": [],
-            "groupMode": "custom",
-            "maxItems": 20,
-            "showInactiveAlerts": false,
-            "sortOrder": 1,
-            "stateFilter": {
-              "error": true,
-              "firing": true,
-              "noData": false,
-              "normal": false,
-              "pending": true,
-              "recovering": true
-            },
-            "viewMode": "list"
-          },
-          "pluginVersion": "12.4.0",
-          "title": "Firing Alerts",
-          "type": "alertlist"
-        }
-      ],
-      "preload": false,
-      "schemaVersion": 42,
-      "tags": [],
-      "templating": {
-        "list": []
-      },
-      "time": {
-        "from": "now-6h",
-        "to": "now"
-      },
-      "timepicker": {},
-      "timezone": "browser",
-      "title": "Grafana Sensors Alerts",
-      "uid": "aglqnrq",
-      "version": 14,
-      "weekStart": ""
-    }
-
   all-sensors-alerts.json: |
     {
       "annotations": {
@@ -391,7 +205,7 @@ data:
       },
       "timepicker": {},
       "timezone": "browser",
-      "title": "All Sensor Alerts",
+      "title": "Sensor Alerts",
       "uid": "ags8f4w",
       "version": 4,
       "weekStart": ""
@@ -554,28 +368,32 @@ data:
               "mappings": [
                 {
                   "options": {
-                    "1": {
+                    "0": {
                       "index": 0,
+                      "text": "Normal"
+                    },
+                    "1": {
+                      "index": 1,
                       "text": "Drought Alert"
                     },
                     "2": {
-                      "index": 1,
+                      "index": 2,
                       "text": "Plague Risk"
                     },
                     "3": {
-                      "index": 2,
+                      "index": 3,
                       "text": "Sensor with Low Data Quality"
                     },
                     "4": {
-                      "index": 3,
+                      "index": 4,
                       "text": "Heat Wave – Potential Impact on Production"
                     },
                     "5": {
-                      "index": 4,
+                      "index": 5,
                       "text": "High Probability of Fungal Diseases"
                     },
                     "6": {
-                      "index": 5,
+                      "index": 6,
                       "text": "High Acidity with Potential for Reduced Nutrient Absorption"
                     }
                   },
@@ -767,7 +585,7 @@ data:
       },
       "timepicker": {},
       "timezone": "browser",
-      "title": "Sensors",
+      "title": "Sensors metrics",
       "uid": "agcdsz22",
       "version": 9,
       "weekStart": ""

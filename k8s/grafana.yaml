@@ -19,7 +19,7 @@ data:
       - name: InfluxDB
         type: influxdb
         access: proxy
-        url: http://agrosolutions-ingest-influxdb:8086
+        url: http://influxdb:8086
         isDefault: true
         jsonData:
           version: Flux
@@ -767,7 +767,7 @@ data:
       },
       "timepicker": {},
       "timezone": "browser",
-      "title": "Sensors2",
+      "title": "Sensors",
       "uid": "agcdsz22",
       "version": 9,
       "weekStart": ""

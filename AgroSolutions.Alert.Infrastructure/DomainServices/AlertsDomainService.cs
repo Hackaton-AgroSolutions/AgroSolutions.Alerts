@@ -39,13 +39,12 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 1: If soil moisture is below 30% in the last 24 hours → "Drought Alert"
     private async Task<bool> CheckDroughtAlertAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync($@"
-            from(bucket: ""{_bucket}"")
-              |> range(start: -24h)
-              |> filter(fn: (r) => r._measurement == ""agro_sensors"")
-              |> filter(fn: (r) => r.field_id == ""{receivedSensorDataEvent.FieldId}"")
-              |> filter(fn: (r) => r._field == ""soil_moisture_percent"")
-              |> min()
+        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync($@"from(bucket: ""{_bucket}"")
+            |> range(start: -24h)
+            |> filter(fn: (r) => r._measurement == ""agro_sensors"")
+            |> filter(fn: (r) => r.field_id == ""{receivedSensorDataEvent.FieldId}"")
+            |> filter(fn: (r) => r._field == ""soil_moisture_percent"")
+            |> min()
         ");
         if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "0") >= 30)
             return false;
@@ -65,12 +64,11 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 2: If the average temperature over the last 12 hours is between 22°C and 30°C and the average air humidity over the last 12 hours is greater than 80% → "Plague Risk"
     private async Task<bool> CheckPlagueRiskAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync($@"
-            temp =
-                from(bucket: ""{_bucket}"")
-                    |> range(start: -12h)
-                    |> filter(fn: (r) => r.sensor_client_id == ""{receivedSensorDataEvent.SensorClientId}"" and r._field == ""temperature"")
-                    |> mean()
+        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync($@"temp =
+            from(bucket: ""{_bucket}"")
+                |> range(start: -12h)
+                |> filter(fn: (r) => r.sensor_client_id == ""{receivedSensorDataEvent.SensorClientId}"" and r._field == ""temperature"")
+                |> mean()
 
             humidity =
                 from(bucket: ""{_bucket}"")
@@ -83,8 +81,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
                     _value: r.temp._value >= 22.0 and 
                             r.temp._value <= 30.0 and 
                             r.humidity._value > 80.0
-                }}))
-        ");
+            }}))");
 
         if (!tables.SelectMany(t => t.Records).Any())
             return false;
@@ -103,14 +100,12 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 3: If data quality score < 70 in the last 6 hours → "Sensor with Low Data Quality"
     private async Task<bool> CheckSensorWithLowDataQualityAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync($@"
-            from(bucket: ""{_bucket}"")
-              |> range(start: -6h)
-              |> filter(fn: (r) => r._measurement == ""agro_sensors"")
-              |> filter(fn: (r) => r.sensor_client_id == ""{receivedSensorDataEvent.SensorClientId}"")
-              |> filter(fn: (r) => r._field == ""data_quality_score"")
-              |> min()
-        ");
+        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync($@"from(bucket: ""{_bucket}"")
+            |> range(start: -6h)
+            |> filter(fn: (r) => r._measurement == ""agro_sensors"")
+            |> filter(fn: (r) => r.sensor_client_id == ""{receivedSensorDataEvent.SensorClientId}"")
+            |> filter(fn: (r) => r._field == ""data_quality_score"")
+            |> min()");
 
         if (float.Parse(tables.SelectMany(t => t.Records).FirstOrDefault()?.Values["_value"].ToString() ?? "0") >= 70)
             return false;
@@ -129,24 +124,20 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 4: If the air temperature is above 35°C for 3 consecutive days and no have chanfe of rain in nexts 24 hours → "Heat Wave – Potential Impact on Production"
     private async Task<bool> CheckHeatWaveAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync($@"
-            from(bucket: ""{_bucket}"")
-                |> range(start: -3d)
-                |> filter(fn: (r) => r._measurement == ""agro_sensors"")
-                |> filter(fn: (r) => r.sensor_client_id == ""{receivedSensorDataEvent.SensorClientId}"")
-                |> filter(fn: (r) => r._field == ""air_temperature_c"")
-                |> aggregateWindow(every: 1d, fn: min, createEmpty: false)
-                |> filter(fn: (r) => r._value > 35)
-        ");
-        IEnumerable<FluxTable> tablesWeather = await _influxDb.QueryAsync($@"
-            import ""experimental""
-            from(bucket: ""{_bucket}"")
-                |> range(start: now(), stop: experimental.addDuration(d: 3d, to: now()))
-                |> filter(fn: (r) => r._measurement == ""weather_forecast"")
-                |> filter(fn: (r) => r.city == ""sao_paulo"")
-                |> filter(fn: (r) => r._field == ""rain_probability"")
-                |> max()
-        ");
+        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync($@"from(bucket: ""{_bucket}"")
+            |> range(start: -3d)
+            |> filter(fn: (r) => r._measurement == ""agro_sensors"")
+            |> filter(fn: (r) => r.sensor_client_id == ""{receivedSensorDataEvent.SensorClientId}"")
+            |> filter(fn: (r) => r._field == ""air_temperature_c"")
+            |> aggregateWindow(every: 1d, fn: min, createEmpty: false)
+            |> filter(fn: (r) => r._value > 35)");
+        IEnumerable<FluxTable> tablesWeather = await _influxDb.QueryAsync($@"import ""experimental""
+from(bucket: ""{_bucket}"")
+    |> range(start: now(), stop: experimental.addDuration(d: 3d, to: now()))
+    |> filter(fn: (r) => r._measurement == ""weather_forecast"")
+    |> filter(fn: (r) => r.city == ""sao_paulo"")
+    |> filter(fn: (r) => r._field == ""rain_probability"")
+    |> max()");
         double maxRainProbability = tablesWeather
             .SelectMany(t => t.Records.Select(r => Convert.ToDouble(r.GetValue())))
             .FirstOrDefault();
@@ -168,22 +159,20 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 5: If soil moisture is above 70% and air humidity is above 85% and the air temperature is between 20°C and 30°C for 8 hours → "High Probability of Fungal Diseases"
     private async Task<bool> CheckHighProbabilityOfFungalDiseasesAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = tables = await _influxDb.QueryAsync($@"
-            from(bucket: ""{_bucket}"")
-              |> range(start: -8h)
-              |> filter(fn: (r) => r._measurement == ""agro_sensors"")
-              |> filter(fn: (r) => r.sensor_client_id == ""{receivedSensorDataEvent.SensorClientId}"")
-              |> filter(fn: (r) =>
-                    r._field == ""soil_moisture_percent"" or
-                    r._field == ""air_humidity_percent"" or
-                    r._field == ""air_temperature_c"")
-              |> pivot(rowKey: [""_time""], columnKey: [""_field""], valueColumn: ""_value"")
-              |> filter(fn: (r) =>
-                    r.soil_moisture_percent > 70 and
-                    r.air_humidity_percent > 85 and
-                    r.air_temperature_c >= 20 and
-                    r.air_temperature_c <= 30)
-        ");
+        IEnumerable<FluxTable> tables = tables = await _influxDb.QueryAsync($@"from(bucket:""{_bucket}"")
+            |> range(start: -8h)
+            |> filter(fn: (r) => r._measurement == ""agro_sensors"")
+            |> filter(fn: (r) => r.sensor_client_id == ""{receivedSensorDataEvent.SensorClientId}"")
+            |> filter(fn: (r) =>
+                r._field == ""soil_moisture_percent"" or
+                r._field == ""air_humidity_percent"" or
+                r._field == ""air_temperature_c"")
+            |> pivot(rowKey: [""_time""], columnKey: [""_field""], valueColumn: ""_value"")
+            |> filter(fn: (r) =>
+                r.soil_moisture_percent > 70 and
+                r.air_humidity_percent > 85 and
+                r.air_temperature_c >= 20 and
+                r.air_temperature_c <= 30)");
 
         if (tables.SelectMany(t => t.Records).ToList().Count == 0)
             return false;

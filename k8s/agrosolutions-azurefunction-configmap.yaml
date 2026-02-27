@@ -13,7 +13,7 @@ data:
   Messaging__Destinations__0__Queue: received-sensor-data-to-influxdb
   Messaging__Destinations__0__RoutingKey: received.sensor.data
   WeatherService__Url: https://api.open-meteo.com
-  InfluxDB__Url: http://agrosolutions-ingest-influxdb:8086
+  InfluxDB__Url: http://influxdb:8086
   InfluxDB__Username: agrosolutions-admin
   InfluxDB__Org: agrosolutions-org
   InfluxDB__Bucket: agrosolutions-bucket

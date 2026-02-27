@@ -11,7 +11,6 @@ namespace AgroSolutions.Alert.Infrastructure.DomainServices;
 public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainService
 {
     private readonly IInfluxDbService _influxDb = influxDb;
-    private readonly string _bucket = Environment.GetEnvironmentVariable("InfluxDB:Bucket")!;
 
     public async Task<byte> CheckAllRulesAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
@@ -41,10 +40,10 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 1: If soil moisture is below 30% in the last 24 hours → "Drought Alert"
     private async Task<bool> CheckDroughtAlertAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("from(bucket: \""+_bucket+"\")" +
+        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("from(bucket: \"main-bucket\")"+
             "   |> range(start: -24h)"+
             "   |> filter(fn: (r) => r._measurement == \"agro_sensors\")"+
-            "   |> filter(fn: (r) => r.field_id == \"{receivedSensorDataEvent.FieldId}\")"+
+            $"   |> filter(fn: (r) => r.field_id == \"{receivedSensorDataEvent.FieldId}\")"+
             "   |> filter(fn: (r) => r._field == \"soil_moisture_percent\")"+
             "   |> min()"
         );
@@ -67,13 +66,13 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     private async Task<bool> CheckPlagueRiskAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
         IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("temp =" +
-        "    from(bucket: \""+ _bucket+"\")" +
+        "    from(bucket: \"main-bucket\")" +
         "        |> range(start: -12h)"+
         $"        |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\" and r._field == \"temperature\")"+
         "        |> mean()"+
 
         "    humidity = "+
-        "        from(bucket: \""+ _bucket+"\")" +
+        "        from(bucket: \"main-bucket\")" +
         "            |> range(start: -12h)"+
         $"            |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\" and r._field == \"humidity\")"+
         "            |> mean()"+
@@ -102,7 +101,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 3: If data quality score < 70 in the last 6 hours → "Sensor with Low Data Quality"
     private async Task<bool> CheckSensorWithLowDataQualityAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("from(bucket: \""+ _bucket+"\")" +
+        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("from(bucket: \"main-bucket\")"+
         "    |> range(start: -6h)"+
         "    |> filter(fn: (r) => r._measurement == \"agro_sensors\")"+
         $"    |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\")"+
@@ -126,15 +125,15 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 4: If the air temperature is above 35°C for 3 consecutive days and no have chanfe of rain in nexts 24 hours → "Heat Wave – Potential Impact on Production"
     private async Task<bool> CheckHeatWaveAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("from(bucket: \""+ _bucket+"\")" +
+        IEnumerable<FluxTable> tables = await _influxDb.QueryAsync("from(bucket: \"main-bucket\")"+
         "    |> range(start: -3d)" +
         "    |> filter(fn: (r) => r._measurement == \"agro_sensors\")" +
-        "    |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\")" +
+        $"    |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\")" +
         "    |> filter(fn: (r) => r._field == \"air_temperature_c\")" +
         "    |> aggregateWindow(every: 1d, fn: min, createEmpty: false)" +
         "    |> filter(fn: (r) => r._value > 35)");
         IEnumerable<FluxTable> tablesWeather = await _influxDb.QueryAsync("import \"experimental\""+
-        "   from(bucket: \""+ _bucket+"\")" +
+        "   from(bucket: \"main-bucket\")"+
         "       |> range(start: now(), stop: experimental.addDuration(d: 3d, to: now()))"+
         "       |> filter(fn: (r) => r._measurement == \"weather_forecast\")"+
         "       |> filter(fn: (r) => r.city == \"sao_paulo\")"+
@@ -161,10 +160,10 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
     // Rule number 5: If soil moisture is above 70% and air humidity is above 85% and the air temperature is between 20°C and 30°C for 8 hours → "High Probability of Fungal Diseases"
     private async Task<bool> CheckHighProbabilityOfFungalDiseasesAsync(ReceivedSensorDataEvent receivedSensorDataEvent)
     {
-        IEnumerable<FluxTable> tables = tables = await _influxDb.QueryAsync("from(bucket:\""+ _bucket+"\")" +
+        IEnumerable<FluxTable> tables = tables = await _influxDb.QueryAsync("from(bucket:\"main-bucket\")"+
         "    |> range(start: -8h)"+
         "    |> filter(fn: (r) => r._measurement == \"agro_sensors\")"+
-        "    |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\")"+
+        $"    |> filter(fn: (r) => r.sensor_client_id == \"{receivedSensorDataEvent.SensorClientId}\")"+
         "    |> filter(fn: (r) =>"+
         "        r._field == \"soil_moisture_percent\" or"+
         "        r._field == \"air_humidity_percent\" or"+

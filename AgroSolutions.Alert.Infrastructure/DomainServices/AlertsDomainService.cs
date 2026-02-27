@@ -75,7 +75,7 @@ public class AlertsDomainService(IInfluxDbService influxDb) : IAlertsDomainServi
         "    |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")" +
         "    |> filter(fn: (r) =>" +
         "        r.soil_ph > 8 and" +
-        "        r.air_temperature_c >= 40)");
+        "        r.air_humidity_percent >= 40)");
 
         if (tables.SelectMany(t => t.Records).ToList().Count == 0)
             return false;
